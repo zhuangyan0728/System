@@ -8,11 +8,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <ctype.h>
-#include <unistd.h>
 
 int main(int argc, const char **argv)
 {
@@ -40,16 +35,18 @@ int main(int argc, const char **argv)
 	return EXIT_SUCCESS;
 }
 
-void lire_deux_octets(int fd, uint16 *val){
+int lire_deux_octets(int fd, uint16 *val){
 	int ret = read(fd, val, sizeof(uint16));
 	if (ret != sizeof(uint16))
 		exit(EXIT_FAILURE);
+	return ret;
 }
 
-void lire_quatre_octets(int fd, uint32 *val){
+int lire_quatre_octets(int fd, uint32 *val){
 	int ret = read(fd, val, sizeof(uint32));
 	if (ret != sizeof(uint32))
 		exit(EXIT_FAILURE);
+	return ret;
 }
 
 void lire_entete(int de, entete_bmp *entete){

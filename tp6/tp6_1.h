@@ -4,6 +4,12 @@
 * 16/10/15
 ***********************/
 
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <ctype.h>
+#include <unistd.h>
+
 typedef unsigned short uint16;
 typedef unsigned int uint32;
 
@@ -41,15 +47,15 @@ typedef struct
 
 int open(const char *pathname, int flags);
 int open(const char *pathname, int flags, mode_t mode);
-int read(int fd, void *buf, size_t count);
+int read(int fd, void *buf, int count);
 
 int lire_deux_octets(int fd, uint16 *val);
 int lire_quatre_octets(int fd, uint32 *val);
-int lire_entete(int de, entete_bmp *entete);
+void lire_entete(int de, entete_bmp *entete);
 
-int ecrire_deux_octets(int fd, uint16 val);
-int ecrire_quatres_octets(int fd, uint32 val);
-int ecrire_entete(int vers, entete_bmp *entete);
+void ecrire_deux_octets(int fd, uint16 val);
+void ecrire_quatres_octets(int fd, uint32 val);
+void ecrire_entete(int vers, entete_bmp *entete);
 
 int verifier_entete(entete_bmp *entete);
 
