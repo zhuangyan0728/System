@@ -1,3 +1,9 @@
+/**********************
+* TP N◦ 6 – Lecture de fichiers BMP
+* Nicolas MAUGER
+* 16/10/15
+***********************/
+
 #include "bmp.h"
 #include <string.h>
 #include <stdio.h>
@@ -220,5 +226,37 @@ void sepia(entete_bmp *entete, unsigned char *pixels){
 		if (entete->bitmap.largeur*(entete->bitmap.profondeur/8*sizeof(char))%4!=0)
 			pixels+=4-(entete->bitmap.largeur*(entete->bitmap.profondeur/8*sizeof(char))%4);
 	}
+}
+
+int main(int argc, const char *argv[])
+{
+
+    int fd;
+    int lol=0;
+
+    if (argc < 2)
+    {
+        printf("Wrong number of parameters\n");
+        printf("Usage: %s <bmp file>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    if ((fd = open(argv[1], O_RDONLY)) == -1){
+        fatal_error("open error");
+	}
+    if (( lol = open("file.bmp", O_WRONLY | O_CREAT, 0666)) == -1){}
+        fatal_error("open error");
+	}	
+
+	copier_bmp(fd,lol);
+	close(fd);
+	close(lol);
+    return EXIT_SUCCESS;
+}
+
+void fatal_error(const char * message)
+{
+    perror(message);
+    exit(EXIT_FAILURE);
 }
 
