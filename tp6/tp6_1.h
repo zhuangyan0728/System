@@ -24,7 +24,7 @@ typedef struct
 
 	uint16 nombre_plans;
 	uint16 profondeur;
-	
+
 	uint32 compression;
 	uint32 taille_donnees_image;
 	uint32 resolution_horizontale;
@@ -38,6 +38,9 @@ typedef struct
 	entete_fichier fichier;
 	entete_bitmap bitmap;
 } entete_bmp;
+
+int open(const char *pathname, int flags);
+int read(int fd, void *buf, size_t count);
 
 int lire_deux_octets(int fd, uint16 *val);
 int lire_quatre_octets(int fd, uint32 *val);
@@ -59,4 +62,5 @@ unsigned char* allouer_pixels(entete_bmp *entete);
 int lire_pixels(int de, entete_bmp *entete, unsigned char *pixels);
 int ecrire_pixels(int vers, entete_bmp *entete, unsigned char *pixels);
 
+int copier_bmp(int de, int vers);
 void fatal_error(const char *);
