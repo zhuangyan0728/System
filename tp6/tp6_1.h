@@ -4,12 +4,6 @@
 * 16/10/15
 ***********************/
 
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <ctype.h>
-#include <unistd.h>
-
 typedef unsigned short uint16;
 typedef unsigned int uint32;
 
@@ -70,4 +64,4 @@ int lire_pixels(int de, entete_bmp *entete, unsigned char *pixels);
 int ecrire_pixels(int vers, entete_bmp *entete, unsigned char *pixels);
 
 int copier_bmp(int de, int vers);
-void fatal_error(const char *);
+void fatal_error(const char *); /* Idee de max */
