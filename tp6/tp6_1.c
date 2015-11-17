@@ -163,7 +163,8 @@ void moitie(entete_bmp *entete, unsigned char *pixels, int sup){
 
 	}
 }
-void sepia(entete_bmp *entete, unsigned char *pixels){
+void sepia(entete_bmp *entete, unsigned char *pixels)
+{
 	int i;
 	int j;
 	for (i=0; i<(int)entete->bitmap.hauteur/3; i++){
@@ -178,7 +179,7 @@ void sepia(entete_bmp *entete, unsigned char *pixels){
 			pixels+=3;
 		}	
 		for (j=0; j<(int)entete->bitmap.largeur/3; j++){
-	
+			
 			pixels[1]= 0;
 			pixels[2]= 0;
 			pixels+=3;		
@@ -201,7 +202,7 @@ void sepia(entete_bmp *entete, unsigned char *pixels){
 			pixels[0]= 0;
 			pixels[2]= 0;
 			pixels+=3;
-					
+			
 		}
 		if (entete->bitmap.largeur*(entete->bitmap.profondeur/8*sizeof(char))%4!=0)
 			pixels+=4-(entete->bitmap.largeur*(entete->bitmap.profondeur/8*sizeof(char))%4);
@@ -219,7 +220,7 @@ void sepia(entete_bmp *entete, unsigned char *pixels){
 			pixels+=3;
 		}	
 		for (j=0; j<(int)entete->bitmap.largeur/3; j++){
-	pixels[0]= 0;
+			pixels[0]= 0;
 			pixels[1]= 0;
 			pixels+=3;		
 		}
@@ -228,35 +229,35 @@ void sepia(entete_bmp *entete, unsigned char *pixels){
 	}
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, const char **argv)
 {
 
-    int fd;
-    int lol=0;
+	int fd;
+	int lol=0;
 
-    if (argc < 2)
-    {
-        printf("Wrong number of parameters\n");
-        printf("Usage: %s <bmp file>\n", argv[0]);
-        exit(EXIT_FAILURE);
-    }
-
-    if ((fd = open(argv[1], O_RDONLY)) == -1){
-        fatal_error("open error");
+	if (argc < 2)
+	{
+		printf("Wrong number of parameters\n");
+		printf("Usage: %s <bmp file>\n", argv[0]);
+		exit(EXIT_FAILURE);
 	}
-    if (( lol = open("file.bmp", O_WRONLY | O_CREAT, 0666)) == -1){}
-        fatal_error("open error");
-	}	
 
-	copier_bmp(fd,lol);
-	close(fd);
-	close(lol);
-    return EXIT_SUCCESS;
+	if ((fd = open(argv[1], O_RDONLY)) == -1){
+		fatal_error("open error");
+	}
+	if (( lol = open("file.bmp", O_WRONLY | O_CREAT, 0666)) == -1){}
+		fatal_error("open error");
+}	
+
+copier_bmp(fd,lol);
+close(fd);
+close(lol);
+return EXIT_SUCCESS;
 }
 
 void fatal_error(const char * message)
 {
-    perror(message);
-    exit(EXIT_FAILURE);
+	perror(message);
+	exit(EXIT_FAILURE);
 }
 

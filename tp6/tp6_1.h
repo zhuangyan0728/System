@@ -1,9 +1,16 @@
+/**********************
+* TP N◦ 6 – Lecture de fichiers BMP
+* Nicolas MAUGER
+* 16/10/15
+***********************/
+
 typedef unsigned short uint16;
 typedef unsigned int uint32;
 
 typedef struct
 {
 	uint16 signature;
+
 	uint32 taille_fichier;
 	uint32 reserve;
 	uint32 offset_donnees;
@@ -14,8 +21,10 @@ typedef struct
 	uint32 taille_entete;
 	uint32 largeur;
 	uint32 hauteur;
+
 	uint16 nombre_plans;
 	uint16 profondeur;
+	
 	uint32 compression;
 	uint32 taille_donnees_image;
 	uint32 resolution_horizontale;
