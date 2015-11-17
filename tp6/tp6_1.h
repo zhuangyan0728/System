@@ -40,6 +40,7 @@ typedef struct
 } entete_bmp;
 
 int open(const char *pathname, int flags);
+int open(const char *pathname, int flags, mode_t mode);
 int read(int fd, void *buf, size_t count);
 
 int lire_deux_octets(int fd, uint16 *val);
