@@ -12,7 +12,6 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <ctype.h>
-#include <unistd.h>
 
 int main(int argc, const char **argv)
 {
@@ -30,7 +29,7 @@ int main(int argc, const char **argv)
 	if ((fd = open(argv[1], O_RDONLY)) == -1){
 		fatal_error("open error");
 	}
-	if (( lol = open("lena.bmp", O_WRONLY | O_CREAT, 0666)) == -1){
+	if (( lol = open("lena.bmp", O_WRONLY | O_CREAT)) == -1){
 		fatal_error("open error");
 	}
 

@@ -39,10 +39,6 @@ typedef struct
 	entete_bitmap bitmap;
 } entete_bmp;
 
-int open(const char *pathname, int flags);
-int open(const char *pathname, int flags, mode_t mode);
-int read(int fd, void *buf, int count);
-
 int lire_deux_octets(int fd, uint16 *val);
 int lire_quatre_octets(int fd, uint32 *val);
 void lire_entete(int de, entete_bmp *entete);
