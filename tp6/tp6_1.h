@@ -54,10 +54,13 @@ void rouge(entete_bmp *entete, unsigned char *pixels);
 void negatif(entete_bmp *entete, unsigned char *pixels);
 void noir_et_blanc(entete_bmp *entete, unsigned char *pixels);
 void sepia(entete_bmp *entete, unsigned char *pixels);
+int copier_bmp(int de, int vers);
 
 unsigned char* allouer_pixels(entete_bmp *entete);
 int lire_pixels(int de, entete_bmp *entete, unsigned char *pixels);
 int ecrire_pixels(int vers, entete_bmp *entete, unsigned char *pixels);
 
-int copier_bmp(int de, int vers);
+int read(int fd, void *buffer, int nbyte);
+int open(char  *filename, int access);
+int close(int fd);
 void fatal_error(const char *); /* Idee de max */
