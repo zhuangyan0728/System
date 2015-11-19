@@ -61,7 +61,6 @@ int lire_pixels(int de, entete_bmp *entete, unsigned char *pixels);
 int ecrire_pixels(int vers, entete_bmp *entete, unsigned char *pixels);
 
 int read(int fd, void *buffer, int nbyte);
-int open(const char  *filename, int access);
 int write(int handle, void *buffer, int nbyte);
 int close(int fd);
 void fatal_error(const char *); /* Idee de max */
