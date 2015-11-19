@@ -26,10 +26,10 @@ int main(int argc, const char **argv)
 		exit(EXIT_FAILURE);
 	}
 
-	if ((fd = open(argv[1], O_RDONLY, S_IWRITE | S_IREAD) == -1){
+	if ((fd = open(argv[1], O_RDONLY, S_IWRITE | S_IREAD)) == -1){
 		fatal_error("open error");
 	}
-	if (( lol = open("lena.bmp", O_WRONLY | O_CREAT, S_IWRITE | S_IREAD) == -1){
+	if (( lol = open("lena.bmp", O_WRONLY | O_CREAT, S_IWRITE | S_IREAD)) == -1){
 		fatal_error("open error");
 	}
 
@@ -265,4 +265,3 @@ void fatal_error(const char * message)
 	perror(message);
 	exit(EXIT_FAILURE);
 }
-
