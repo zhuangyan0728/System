@@ -60,7 +60,5 @@ unsigned char* allouer_pixels(entete_bmp *entete);
 int lire_pixels(int de, entete_bmp *entete, unsigned char *pixels);
 int ecrire_pixels(int vers, entete_bmp *entete, unsigned char *pixels);
 
-int read(int fd, void *buffer, int nbyte);
-int write(int handle, void *buffer, int nbyte);
-int close(int fd);
 void fatal_error(const char *); /* Idee de max */
+void usage(char *s);

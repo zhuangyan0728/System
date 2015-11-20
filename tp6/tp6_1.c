@@ -12,30 +12,77 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <ctype.h>
+#include <unistd.h>
+#include <getopt.h>
 
-int main(int argc, const char **argv)
+int main(int argc, char **argv)
 {
 
-	int fd;
-	int lol=0;
+	/* Pas d'argument */
+    if (argc == 1)
+        usage(argv[0]);
 
-	if (argc < 2)
-	{
-		printf("Wrong number of parameters\n");
-		printf("Usage: %s <bmp file>\n", argv[0]);
-		exit(EXIT_FAILURE);
-	}
+    /* Initialisation */
+    int c;
+    char *nom = NULL;
+    int de = open("lena.bmp", O_RDONLY);
+    entete_bmp entete;
+    unsigned char *pixels;
 
-	if ((fd = open(argv[1], O_RDONLY)) == -1){
-		fatal_error("open error");
-	}
-	if (( lol = open("lena.bmp", O_WRONLY | O_CREAT)) == -1){
-		fatal_error("open error");
-	}
+    /* Lecture du fichier source */
+    lire_entete(de, &entete);
+    pixels = allouer_pixels(&entete);
+    lire_pixels(de, &entete, pixels);
 
-	copier_bmp(fd,lol);
-	close(fd);
-	close(lol);
+	while ((c = getopt(argc, argv, "rnbmia")) != -1) {
+        switch (c) {
+            case 'r':
+                rouge(&entete, pixels);
+                break;
+            case 'n':
+                negatif(&entete, pixels);
+                break;
+            case 'b':
+                noir_et_blanc(&entete, pixels);
+                break;
+            case 'm':
+                moitie(&entete, pixels, 1);
+                break;
+            case 'i':
+                moitie(&entete, pixels, 0);
+                break;
+            case 'a':
+            	sepia(&entete, pixels);
+                break;
+            case '?':
+                usage(argv[0]);
+                break;
+        }
+    }
+
+	/* Lecture de l'option facultative (nom fichier) */
+    int index;
+    for (index = optind; index < argc; index++) {
+        if (nom == NULL)
+            nom = argv[index];
+        else
+            printf ("L'option %s a été ignoré.\n", argv[index]);
+    }
+
+    /* On écrit dans le fichier de destination */
+    int vers;
+    if (nom == NULL)
+        vers = open("lena_out.bmp", O_WRONLY | O_CREAT, 0644);
+    else 
+        vers = open(nom, O_WRONLY | O_CREAT, 0644);
+
+    /* Écriture du fichier destination */
+    ecrire_entete(vers, &entete);
+    ecrire_pixels(vers, &entete, pixels);
+
+    /* On libère les pixels */
+    free(pixels);
+
 	return EXIT_SUCCESS;
 }
 
@@ -58,11 +105,16 @@ void lire_entete(int de, entete_bmp *entete){
 	lire_quatre_octets(de, &(entete->fichier.taille_fichier));
 	lire_quatre_octets(de, &(entete->fichier.reserve));
 	lire_quatre_octets(de, &(entete->fichier.offset_donnees));
+
 	lire_quatre_octets(de, &(entete->bitmap.taille_entete));
 	lire_quatre_octets(de, &(entete->bitmap.largeur));
 	lire_quatre_octets(de, &(entete->bitmap.hauteur));
+
 	lire_deux_octets(de, &(entete->bitmap.nombre_plans));
 	lire_deux_octets(de, &(entete->bitmap.profondeur));
+
+	lire_quatre_octets(de, &(entete->bitmap.compression));
+
 	lire_quatre_octets(de, &(entete->bitmap.taille_donnees_image));
 	lire_quatre_octets(de, &(entete->bitmap.resolution_horizontale));
 	lire_quatre_octets(de, &(entete->bitmap.resolution_verticale));
@@ -92,6 +144,7 @@ void ecrire_entete(int vers, entete_bmp *entete){
 	ecrire_quatre_octets(vers, entete->bitmap.hauteur);
 	ecrire_deux_octets(vers, entete->bitmap.nombre_plans);
 	ecrire_deux_octets(vers, entete->bitmap.profondeur);
+	ecrire_quatre_octets(vers, entete->bitmap.compression);
 	ecrire_quatre_octets(vers, entete->bitmap.taille_donnees_image);
 	ecrire_quatre_octets(vers, entete->bitmap.resolution_horizontale);
 	ecrire_quatre_octets(vers, entete->bitmap.resolution_verticale);
@@ -264,4 +317,17 @@ void fatal_error(const char * message)
 {
 	perror(message);
 	exit(EXIT_FAILURE);
+}
+
+void usage(char *s)
+{
+    printf("Utilisation : %s [OPTIONS]\n", s);
+    printf("Liste des options :\n");
+    printf("\t-r : Passer l'image en rouge\n");
+    printf("\t-n : Passer l'image en negatif\n");
+    printf("\t-b : Passer l'image en noir et blanc\n");
+    printf("\t-m : Garder la partie supérieur de l'image\n");   
+    printf("\t-i : Garder la partie inférieure de l'image\n");
+    printf("\t-a : Passer l'image en Arlequin\n");
+    exit(1);
 }
