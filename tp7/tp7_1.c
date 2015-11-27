@@ -31,20 +31,28 @@ void traiter_fichier(const char *chemin) {
 
 void parcourir_repertoire(const char *chemin) {
 	if(estValide(chemin)){
-
+		DIR *fichier = opendir(chemin);
+		struct dirent *lecture; //pas sur que c'est un pointeur
+		while(lecture = readdir(fichier) != NULL){
+			traiter_fichier(readdir(fichier)).d_name);
+			if(lecture.d_type == DT_DIR)
+				parcourir_repertoire(fichier);
+		}
 	}else{
+		printf("Le chemin passé en paramètre n'est pas valide.\n");
 		exit(EXIT_FAILURE);
 	}
-
 }
 
 /* Not yet implemented */
 int estValide(char *chemin){
-	DIR *fichier = opendir(chemin);
-	while(){
-		
+	struct dirent *lecture;
+	lecture = readdir(fichier);
+	if(lecture.d_type == DT_DIR || lecture.d_type == DT_REG){
+		return 1;
+	}else{
+		return -1;
 	}
-	return 1;
 }
 
 
