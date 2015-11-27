@@ -11,13 +11,9 @@ SRC = $(wildcard *.c)
 OBJS = $(SRC:.c=.o)
 AOUT = prog
 
-all : $(AOUT) exe
-
 prog : $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $^
-
-exe : 
-	./prog
+	display lena_out.bmp &
 
 %.o : %.c
 	$(CC) $(CFLAGS) -o $@ -c $<

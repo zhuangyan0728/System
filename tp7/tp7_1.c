@@ -19,16 +19,70 @@ stat
 lstat
 */
 
-int main(/*int argc, char **argv*/){
+int main (/*int argc, char **argv*/) {
 	parcourir_repertoire(".");
 	return 1;
 }
 
-void traiter_fichier(const char *chemin){
+void traiter_fichier(const char *chemin) {
 	printf("%s\n", chemin);
 	exit(1);
 }
 
+void parcourir_repertoire(const char *chemin) {
+	if(estValide(chemin)){
+
+	}else{
+		exit(EXIT_FAILURE);
+	}
+
+}
+
+/* Not yet implemented */
+int estValide(char *chemin){
+	DIR *fichier = opendir(chemin);
+	while(){
+		
+	}
+	return 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 void parcourir_repertoire(const char *chemin){
 	DIR * folder = opendir(chemin);
 	struct dirent *stuct_dir;
@@ -37,3 +91,4 @@ void parcourir_repertoire(const char *chemin){
 
 	}
 }
+*/

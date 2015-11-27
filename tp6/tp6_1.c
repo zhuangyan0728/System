@@ -4,7 +4,6 @@
 * 16/10/15
 ***********************/
 
-#include "tp6_1.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,74 +13,84 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <getopt.h>
+#include "tp6_1.h"
 
 int main(int argc, char **argv)
 {
 
 	/* Pas d'argument */
-    if (argc == 1)
-        usage(argv[0]);
+	if (argc == 1)
+		usage(argv[0]);
 
     /* Initialisation */
-    int c;
-    char *nom = NULL;
-    int de = open("lena.bmp", O_RDONLY);
-    entete_bmp entete;
-    unsigned char *pixels;
+	int c;
+	char *nom = NULL;
+	int de = open("lena.bmp", O_RDONLY);
+	entete_bmp entete;
+	unsigned char *pixels;
 
+	if (de < 0){
+		printf("erreur fichier entree\n");
+		exit(EXIT_FAILURE);
+	}else{
     /* Lecture du fichier source */
-    lire_entete(de, &entete);
-    pixels = allouer_pixels(&entete);
-    lire_pixels(de, &entete, pixels);
+		lire_entete(de, &entete);
+		pixels = allouer_pixels(&entete);
+		lire_pixels(de, &entete, pixels);
+	}
 
 	while ((c = getopt(argc, argv, "rnbmia")) != -1) {
-        switch (c) {
-            case 'r':
-                rouge(&entete, pixels);
-                break;
-            case 'n':
-                negatif(&entete, pixels);
-                break;
-            case 'b':
-                noir_et_blanc(&entete, pixels);
-                break;
-            case 'm':
-                moitie(&entete, pixels, 1);
-                break;
-            case 'i':
-                moitie(&entete, pixels, 0);
-                break;
-            case 'a':
-            	sepia(&entete, pixels);
-                break;
-            case '?':
-                usage(argv[0]);
-                break;
-        }
-    }
+		switch (c) {
+			case 'r':
+			rouge(&entete, pixels);
+			break;
+			case 'n':
+			negatif(&entete, pixels);
+			break;
+			case 'b':
+			noir_et_blanc(&entete, pixels);
+			break;
+			case 'm':
+			moitie(&entete, pixels, 1);
+			break;
+			case 'i':
+			moitie(&entete, pixels, 0);
+			break;
+			case 'a':
+			sepia(&entete, pixels);
+			break;
+			default :
+			tuto(argv[0]);
+			break;
+		}
+	}
 
 	/* Lecture de l'option facultative (nom fichier) */
-    int index;
-    for (index = optind; index < argc; index++) {
-        if (nom == NULL)
-            nom = argv[index];
-        else
-            printf ("L'option %s a été ignoré.\n", argv[index]);
-    }
+	int index;
+	for (index = optind; index < argc; index++) {
+		if (nom == NULL)
+			nom = argv[index];
+		else
+			printf ("L'option %s a été ignoré.\n", argv[index]);
+	}
 
     /* On écrit dans le fichier de destination */
-    int vers;
-    if (nom == NULL)
-        vers = open("lena_out.bmp", O_WRONLY | O_CREAT, 0644);
-    else 
-        vers = open(nom, O_WRONLY | O_CREAT, 0644);
+	int vers;
+	if (nom == NULL)
+		vers = open("lena_out.bmp", O_WRONLY | O_CREAT, 0644);
+	else 
+		vers = open(nom, O_WRONLY | O_CREAT, 0644);
 
+	if (vers < 0){
+		printf("erreur fichier sortie\n");
+		exit(EXIT_FAILURE);
+	}else{
     /* Écriture du fichier destination */
-    ecrire_entete(vers, &entete);
-    ecrire_pixels(vers, &entete, pixels);
-
+		ecrire_entete(vers, &entete);
+		ecrire_pixels(vers, &entete, pixels);
+	}
     /* On libère les pixels */
-    free(pixels);
+	free(pixels);
 
 	return EXIT_SUCCESS;
 }
@@ -90,6 +99,7 @@ int lire_deux_octets(int fd, uint16 *val){
 	int ret = read(fd, val, sizeof(uint16));
 	if (ret != sizeof(uint16))
 		exit(EXIT_FAILURE);
+
 	return ret;
 }
 
@@ -97,6 +107,7 @@ int lire_quatre_octets(int fd, uint32 *val){
 	int ret = read(fd, val, sizeof(uint32));
 	if (ret != sizeof(uint32))
 		exit(EXIT_FAILURE);
+
 	return ret;
 }
 
@@ -168,6 +179,7 @@ int ecrire_pixels(int vers, entete_bmp *entete, unsigned char *pixels){
 	return write(vers, pixels, entete->bitmap.largeur*entete->bitmap.hauteur*entete->bitmap.profondeur/8*sizeof(char));
 }
 
+/* Donne dans le tp. Par la suite, on n'utilise plus cette fonction */
 int copier_bmp(int de, int vers){
 	unsigned char *pixels;	
 	entete_bmp entete;
@@ -175,7 +187,7 @@ int copier_bmp(int de, int vers){
 	lire_entete(de, &entete);
 	pixels = allouer_pixels(&entete);
 	lire_pixels(de, &entete, pixels);
-	/* écriture du fichier destination */	
+	/* écriture du fichier destination */
 	rouge(&entete, pixels);
 	negatif(&entete, pixels);
 	moitie(&entete, pixels,1);
@@ -207,9 +219,9 @@ void negatif(entete_bmp *entete, unsigned char *pixels){
 	int j;
 	for (i=0; i<(int)entete->bitmap.hauteur; i++){
 		for (j=0; j<(int)entete->bitmap.largeur; j++){
-			pixels[0]=~pixels[0];
-			pixels[1]=~pixels[1];
-			pixels[2]=~pixels[2];
+			pixels[0]= 255 - pixels[0]; /* ou pixels[0] =~ pixels[0]; */
+			pixels[1]= 255 - pixels[1];
+			pixels[2]= 255 - pixels[2];
 			pixels+=3;
 		}
 		if (entete->bitmap.largeur*(entete->bitmap.profondeur/8*sizeof(char))%4!=0)
@@ -263,7 +275,6 @@ void sepia(entete_bmp *entete, unsigned char *pixels)
 			pixels+=3;
 		}	
 		for (j=0; j<(int)entete->bitmap.largeur/3; j++){
-
 			pixels[1]= 0;
 			pixels[2]= 0;
 			pixels+=3;		
@@ -319,15 +330,15 @@ void fatal_error(const char * message)
 	exit(EXIT_FAILURE);
 }
 
-void usage(char *s)
+void tuto(char *s)
 {
-    printf("Utilisation : %s [OPTIONS]\n", s);
-    printf("Liste des options :\n");
-    printf("\t-r : Passer l'image en rouge\n");
-    printf("\t-n : Passer l'image en negatif\n");
-    printf("\t-b : Passer l'image en noir et blanc\n");
-    printf("\t-m : Garder la partie supérieur de l'image\n");   
-    printf("\t-i : Garder la partie inférieure de l'image\n");
-    printf("\t-a : Passer l'image en Arlequin\n");
-    exit(1);
+	printf("Utilisation : %s [OPTIONS]\n", s);
+	printf("Liste des options :\n");
+	printf("\t-r : Passer l'image en rouge\n");
+	printf("\t-n : Passer l'image en negatif\n");
+	printf("\t-b : Passer l'image en noir et blanc\n");
+	printf("\t-m : Garder la partie supérieur de l'image\n");   
+	printf("\t-i : Garder la partie inférieure de l'image\n");
+	printf("\t-a : Passer l'image en Arlequin\n");
+	exit(1);
 }
