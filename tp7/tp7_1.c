@@ -2,15 +2,16 @@
 * TP N◦ 7 – Impélentation de la commande find
 * Nicolas MAUGER
 * 20/11/15
-***********************/
-#include "tp7_1.h"
+**********************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <string.h>
+#include <unistd.h>
 
-
+#include "tp7_1.h"
 /*
 opendir
 closedir
@@ -32,11 +33,12 @@ void traiter_fichier(const char *chemin) {
 void parcourir_repertoire(const char *chemin) {
 	if(estValide(chemin)){
 		DIR *fichier = opendir(chemin);
-		struct dirent *lecture; //pas sur que c'est un pointeur
-		while(lecture = readdir(fichier) != NULL){
-			traiter_fichier(readdir(fichier)).d_name);
-			if(lecture.d_type == DT_DIR)
+		struct dirent *lecture; /* pas sur que c'est un pointeur */
+		while((lecture = readdir(fichier)) != NULL){
+			traiter_fichier(readdir(fichier).d_name);
+			if(lecture->d_type == DT_DIR){
 				parcourir_repertoire(fichier);
+			}
 		}
 	}else{
 		printf("Le chemin passé en paramètre n'est pas valide.\n");
@@ -44,30 +46,28 @@ void parcourir_repertoire(const char *chemin) {
 	}
 }
 
-/* Not yet implemented */
+int nom_correspond(const char *chemin, const char *motif){
+	return strcmp(motif, chemin);
+}
+
+int type_correspond(const struct stat *buf, char type){
+	return (buf->st_mode == type ? 1 : -1);
+}
+
+int estVide(const struct stat *buf) {
+	return (buf == NULL ? 1 : -1);
+}
+
 int estValide(char *chemin){
 	struct dirent *lecture;
+	DIR *fichier = opendir(chemin);
 	lecture = readdir(fichier);
-	if(lecture.d_type == DT_DIR || lecture.d_type == DT_REG){
+	if(lecture->d_type == DT_DIR || lecture->d_type == DT_REG){
 		return 1;
 	}else{
 		return -1;
-	}
+	}	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

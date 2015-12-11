@@ -27,9 +27,12 @@ typedef struct
 
 void traiter_fichier(const char *chemin);
 void parcourir_repertoire(const char *chemin);
-/*
 int nom_correspond(const char *chemin, const char *motif);
 int type_correspond(const struct stat *buf, char type);
+int estVide(const struct stat *buf);
+int estValide(const char *chemin);
+
+/*
 int executable(const struct stat *buf);
 int vide(const struct stat *buf);
 int plus_recent(const struct stat *buf, const char *fichier_reference);
