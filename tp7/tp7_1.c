@@ -62,11 +62,7 @@ int estValide(char *chemin){
 	struct dirent *lecture;
 	DIR *fichier = opendir(chemin);
 	lecture = readdir(fichier);
-	if(lecture->d_type == DT_DIR || lecture->d_type == DT_REG){
-		return 1;
-	}else{
-		return -1;
-	}	
+	return(lecture->d_type == DT_DIR || lecture->d_type == DT_REG?1:-1);	
 }
 
 
