@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "tp8_1.h"
+#include "ligne_commande.h"
 
 int main(/*  char ** args  */) {
     affiche_prompt();
@@ -26,5 +27,6 @@ void affiche_prompt() {
 
 void execute_ligne_commande() {
    /* I must use the execvp function */
-    execvp(,ligne_commande())
+   /* execvp( 
+   execvp(,ligne_commande())
 }
