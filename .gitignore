@@ -29,6 +29,17 @@
 *.hex
 
 # =========================
+# IDE Files
+# =========================
+
+# Eclipse
+# ========================
+
+.cproject
+.project
+.settings/*
+
+# =========================
 # Operating System Files
 # =========================
 
@@ -74,3 +85,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/Debug/
