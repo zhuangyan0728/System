@@ -36,6 +36,7 @@ void parcourir_repertoire(const char *chemin) {
 		struct dirent *lecture; /* pas sur que c'est un pointeur */
 		while((lecture = readdir(fichier)) != NULL){
 			traiter_fichier(readdir(fichier).d_name);
+			void DT_DIR;
 			if(lecture->d_type == DT_DIR){
 				parcourir_repertoire(fichier);
 			}
